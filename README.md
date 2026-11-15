@@ -7,11 +7,13 @@ Published at **https://vngs.pages.dev/**.
 
 ## Pages
 
+Everything served lives in `public/`; the repository root only holds project files.
+
 | File | What it is |
 | --- | --- |
-| `index.html` | Home and About: who the group is, and what Warpath is |
-| `Ritual.html` | Standalone page |
-| `R3dc0re.html` | Standalone page |
+| `public/index.html` | Home and About: who the group is, and what Warpath is |
+| `public/Ritual.html` | Standalone page |
+| `public/R3dc0re.html` | Standalone page |
 
 ## Stack
 
@@ -34,4 +36,4 @@ Cloudflare Pages, project `vngs`:
 npm run deploy
 ```
 
-The site is served straight from the repository root, so any static host works too.
+The site is served straight from `public/`, so any static host works too.

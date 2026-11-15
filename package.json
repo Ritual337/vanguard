@@ -5,8 +5,8 @@
   "type": "module",
   "description": "Vanguard — a Warpath friend group, served as a static site",
   "scripts": {
-    "dev": "wrangler pages dev . --port 4323",
-    "deploy": "wrangler pages deploy . --project-name vngs"
+    "dev": "wrangler pages dev public --port 4323",
+    "deploy": "wrangler pages deploy public --project-name vngs"
   },
   "devDependencies": {
     "wrangler": "^4.0.0"
