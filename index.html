@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<meta name="description" content="Vanguard is a small friend group that plays Warpath, the modern-war strategy game by Lilith Games. One camp, one alliance, no membership form.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Vanguard — A Friend Group That Plays Warpath">
+<meta property="og:description" content="A small friend group that plays Warpath, the modern-war strategy game by Lilith Games. One camp, one alliance, no membership form.">
+<meta property="og:url" content="https://vngs.pages.dev/">
+<link rel="canonical" href="https://vngs.pages.dev/">
+<title>Vanguard — A Friend Group That Plays Warpath</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23000'/%3E%3Cpath d='M14 16h10l8 25 8-25h10L36 52H28z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75,800&family=Caveat:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000;--ink:#fff;--mute:#8a8a8a;--dim:#5c5c5c;
+  --line:rgba(255,255,255,.16);--line-strong:rgba(255,255,255,.38);
+  --pad:clamp(18px,4.2vw,68px);
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0;background:var(--bg)}
+body{
+  color:var(--ink);
+  font:400 .72rem/1.55 'Space Mono',ui-monospace,monospace;
+  text-transform:uppercase;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--ink);color:var(--bg)}
+:focus-visible{outline:2px solid var(--ink);outline-offset:4px}
+a{color:inherit}
+
+/* film grain */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:70;opacity:.07;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(1) infinite;
+}
+@keyframes grain{
+  0%{background-position:0 0}25%{background-position:-60px 30px}
+  50%{background-position:40px -50px}75%{background-position:-30px -20px}
+}
+
+/* background canvas + scan */
+.fx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.fx canvas{display:block;width:100%;height:100%;opacity:.55}
+.scan{
+  position:fixed;top:0;bottom:0;left:0;width:1px;z-index:35;pointer-events:none;
+  background:var(--ink);opacity:.14;animation:scan 16s linear infinite;
+}
+.scan::after{content:"";position:absolute;top:0;bottom:0;left:-48px;width:48px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07))}
+@keyframes scan{from{transform:translateX(-6vw)}to{transform:translateX(106vw)}}
+
+/* skip link */
+.skip{
+  position:fixed;left:12px;top:12px;z-index:100;background:var(--ink);color:var(--bg);
+  padding:10px 14px;font:700 11px/1 'Space Mono',monospace;letter-spacing:.12em;text-decoration:none;
+  transform:translateY(-180%);transition:transform .2s ease;
+}
+.skip:focus{transform:none}
+
+/* fixed header */
+.bar{
+  position:fixed;top:0;left:0;right:0;z-index:40;
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  min-height:54px;padding:0 var(--pad);
+  background:rgba(0,0,0,.78);border-bottom:1px solid var(--line);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+}
+.brand{font:800 13px/1 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;font-stretch:75%;letter-spacing:.14em;text-decoration:none;white-space:nowrap}
+.brand sup{font:700 8px/1 'Space Mono',monospace;letter-spacing:.08em;vertical-align:super;color:var(--mute);margin-left:3px}
+.bar-mid{display:flex;align-items:center;gap:9px;font:700 9.5px/1 'Space Mono',monospace;letter-spacing:.24em;color:var(--mute);white-space:nowrap}
+.bar-mid a{color:inherit;text-decoration:none;border-bottom:1px solid transparent;padding-bottom:3px;transition:color .25s,border-color .25s}
+.bar-mid a:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.bar-right{display:flex;align-items:center;gap:9px;font:700 9.5px/1 'Space Mono',monospace;letter-spacing:.16em;white-space:nowrap}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--ink);animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* corner marks */
+.cn{position:fixed;width:22px;height:22px;border:0 solid var(--ink);z-index:45;pointer-events:none}
+.c1{top:10px;left:10px;border-width:3px 0 0 3px}
+.c2{top:10px;right:10px;border-width:3px 3px 0 0}
+.c3{bottom:10px;left:10px;border-width:0 0 3px 3px}
+.c4{bottom:10px;right:10px;border-width:0 3px 3px 0}
+
+/* vertical label */
+.side{
+  position:fixed;left:.9rem;top:50%;z-index:30;writing-mode:vertical-rl;transform:translateY(-50%) rotate(180deg);
+  color:var(--mute);font:800 10px/1 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;letter-spacing:.24em;pointer-events:none;user-select:none;
+}
+
+/* ---------------------------------------------------------------- hero ---- */
+.hero{
+  position:relative;z-index:1;min-height:100svh;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:calc(54px + clamp(36px,6vh,74px)) var(--pad) clamp(30px,5vh,52px);
+}
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0 41px,rgba(255,255,255,.05) 41px 42px,transparent 42px 97px,rgba(255,255,255,.032) 97px 99px);
+  -webkit-mask-image:linear-gradient(#000 0%,transparent 88%);
+  mask-image:linear-gradient(#000 0%,transparent 88%);
+}
+.ghost{
+  position:absolute;right:-.06em;bottom:-.42em;z-index:0;
+  font:800 clamp(90px,24vw,380px)/.72 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.15);
+  transform:rotate(-5deg);transform-origin:right bottom;
+  pointer-events:none;user-select:none;white-space:nowrap;
+}
+.sc{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none}
+.sc path{fill:none;stroke:rgba(255,255,255,.34);stroke-width:1;vector-effect:non-scaling-stroke}
+.kick{
+  position:relative;z-index:2;display:flex;align-items:center;gap:clamp(10px,2vw,20px);
+  margin-bottom:clamp(18px,3.5vh,38px);
+  font:700 clamp(8.5px,.75vw,11px)/1 'Space Mono',monospace;letter-spacing:.24em;color:var(--mute);
+}
+.kick .rule{flex:1;height:1px;background:var(--line)}
+.kick b{font-weight:700;color:var(--ink)}
+h1{
+  position:relative;z-index:2;margin:0;
+  font:800 clamp(64px,11.5vw,190px)/.78 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;letter-spacing:-.02em;text-transform:uppercase;
+}
+.ln{display:block;white-space:nowrap}
+.lt{display:inline-block}
+.l1 .lt{
+  transform:rotate(-1.4deg);transform-origin:left bottom;
+  text-shadow:.045em .04em 0 var(--bg),.062em .056em 0 rgba(255,255,255,.5);
+}
+.l2 .lt{
+  transform:rotate(.7deg);transform-origin:left bottom;
+  color:transparent;-webkit-text-stroke:max(1.5px,.32vw) var(--ink);
+  margin-left:clamp(8px,4vw,74px);
+}
+.l3 .lt{
+  font-family:Caveat,'Segoe Script','Bradley Hand',cursive;font-weight:700;font-stretch:100%;
+  text-transform:none;font-size:1.5em;line-height:.72;letter-spacing:0;
+  margin-left:clamp(14px,7vw,130px);transform:rotate(-3deg);transform-origin:left bottom;
+}
+.lede{
+  position:relative;z-index:2;max-width:68ch;margin:clamp(20px,4vh,40px) 0 0;
+  font:400 clamp(12px,1.02vw,15px)/1.75 'Space Mono',monospace;
+  text-transform:none;color:#c9c9c9;
+}
+.lede p{margin:0 0 1em}
+.lede p:last-child{margin-bottom:0}
+.lede strong{color:var(--ink);font-weight:700}
+.stamp{
+  position:absolute;right:var(--pad);top:38%;z-index:3;
+  background:var(--ink);color:var(--bg);padding:.75em .95em .65em;
+  font:800 clamp(12px,1.4vw,20px)/.92 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;text-transform:uppercase;letter-spacing:.02em;
+  transform:rotate(-6deg);box-shadow:10px 10px 0 rgba(255,255,255,.14);
+}
+.stamp em{display:block;font:700 .4em/1 'Space Mono',monospace;font-style:normal;letter-spacing:.22em;opacity:.55;margin-bottom:.6em}
+.hero-foot{
+  position:relative;z-index:3;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  margin-top:clamp(26px,5vh,50px);padding-top:13px;border-top:1px solid var(--line);
+  font:700 9.5px/1.5 'Space Mono',monospace;letter-spacing:.2em;color:var(--mute);
+}
+.hero-foot b{font-weight:700;color:var(--ink)}
+
+/* --------------------------------------------------------------- ticker ---- */
+.ticker{
+  position:relative;z-index:1;overflow:hidden;background:var(--bg);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:13px 0;
+}
+.ticker-track{display:flex;width:max-content;will-change:transform;animation:tick 42s linear infinite}
+.tick-set{
+  display:flex;align-items:center;gap:2em;padding-right:2em;white-space:nowrap;
+  font:800 clamp(13px,1.55vw,22px)/1 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;letter-spacing:.03em;text-transform:uppercase;color:var(--mute);
+}
+.tick-set i{font-style:normal;color:var(--ink)}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* -------------------------------------------------------------- about ---- */
+.sec{
+  position:relative;z-index:1;overflow:hidden;
+  padding:clamp(64px,11vh,140px) var(--pad);
+  border-top:1px solid var(--line);
+  scroll-margin-top:80px;
+}
+.wrap{max-width:1520px;margin:0 auto}
+.sec-head{
+  display:flex;align-items:center;gap:clamp(12px,2vw,22px);margin-bottom:clamp(30px,6vh,66px);
+  font:700 9.5px/1 'Space Mono',monospace;letter-spacing:.24em;color:var(--mute);
+}
+.sec-head .n{
+  display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:40px;
+  border:1px solid var(--line-strong);color:var(--ink);font-size:10px;letter-spacing:.1em;
+}
+.sec-head .rule{flex:1;height:1px;background:var(--line)}
+.sec-head b{font-weight:700;color:var(--ink)}
+.sec h2{
+  margin:0;max-width:19ch;
+  font:800 clamp(30px,5.3vw,84px)/.95 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;letter-spacing:-.015em;text-transform:uppercase;
+}
+.sec h2 em{font-style:normal;color:transparent;-webkit-text-stroke:1px var(--ink)}
+.split{
+  display:grid;grid-template-columns:minmax(0,3fr) minmax(0,8fr);
+  gap:clamp(24px,5vw,90px);align-items:start;margin-top:clamp(28px,5vh,56px);
+}
+.split-label{border-top:1px solid var(--line-strong);padding-top:15px;font:700 9px/1.7 'Space Mono',monospace;letter-spacing:.18em;color:var(--mute)}
+.split-label b{display:block;color:var(--ink);margin-bottom:8px;font-weight:700}
+.body{max-width:68ch}
+.body p{margin:0 0 1.2em;font:400 clamp(13px,1.05vw,16px)/1.8 'Space Mono',monospace;text-transform:none;color:#c2c2c2}
+.body p:first-child{font-size:clamp(16px,1.55vw,22px);line-height:1.55;color:var(--ink)}
+.pull{
+  margin:clamp(26px,4vh,46px) 0 0;padding:4px 0 4px 22px;border-left:2px solid var(--ink);
+  font:700 clamp(24px,3.2vw,46px)/1.08 Caveat,'Segoe Script',cursive;
+  text-transform:none;color:var(--ink);
+}
+.stats{
+  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  margin-top:clamp(36px,6vh,68px);border-top:1px solid var(--line);
+}
+.stat{padding:20px 20px 4px 0;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0;padding-right:0}
+.stat b{display:block;font:800 clamp(40px,6vw,84px)/.85 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;font-stretch:75%;letter-spacing:-.02em}
+.stat span{display:block;margin-top:12px;font:700 9px/1.6 'Space Mono',monospace;letter-spacing:.18em;color:var(--mute)}
+
+
+/* ----------------------------------------------------------------- footer ---- */
+footer{position:relative;z-index:1;border-top:1px solid var(--line-strong);padding:clamp(32px,6vh,64px) var(--pad) clamp(20px,4vh,34px)}
+.fgrid{display:grid;grid-template-columns:1.5fr 1fr auto;gap:clamp(24px,4vw,64px);align-items:end}
+.fbrand{font:800 clamp(42px,8vw,120px)/.8 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;font-stretch:75%;letter-spacing:-.02em;text-transform:uppercase}
+.fbrand span{color:transparent;-webkit-text-stroke:1px var(--ink)}
+.fcol{font:400 10px/1.9 'Space Mono',monospace;letter-spacing:.12em;color:var(--mute);text-transform:uppercase;text-align:right}
+.fcol b{display:block;color:var(--ink);font-weight:700}
+.top-link{
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+  font:700 10px/1 'Space Mono',monospace;letter-spacing:.2em;color:var(--ink);
+  border:1px solid var(--line-strong);padding:12px 14px;transition:background .3s,color .3s;
+  white-space:nowrap;
+}
+.top-link:hover{background:var(--ink);color:var(--bg)}
+.fbar{
+  display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap;
+  margin-top:clamp(30px,5vh,52px);padding-top:14px;border-top:1px solid var(--line);
+  font:700 9px/1.5 'Space Mono',monospace;letter-spacing:.18em;color:var(--mute);
+}
+.fbar b{font-weight:700;color:var(--ink)}
+.coords{cursor:crosshair;border-bottom:1px dotted var(--line-strong)}
+
+/* reveal (added by JS, so content is visible without it) */
+.reveal.pre{opacity:0;transform:translateY(26px)}
+.reveal.in{opacity:1;transform:none;transition:opacity .8s ease,transform .8s cubic-bezier(.16,1,.3,1)}
+
+/* --------------------------------------------------------------- responsive ---- */
+@media (max-width:1100px){
+  .stamp{top:30%}
+}
+@media (max-width:980px){
+  .stamp{
+    position:static;align-self:flex-end;margin:clamp(24px,4vh,38px) 0 0;
+    transform:rotate(-3deg);box-shadow:7px 7px 0 rgba(255,255,255,.14);
+  }
+  .side{display:none}
+  .split{grid-template-columns:1fr;gap:26px}
+  .split-label{max-width:38ch}
+}
+@media (max-width:860px){
+  .bar-mid{display:none}
+  .fgrid{grid-template-columns:1fr;align-items:start}
+  .fcol{text-align:left}
+  .top-link{justify-self:start}
+}
+@media (max-width:700px){
+  .hero{padding-top:calc(54px + 44px)}
+  .kick .mid{display:none}
+  .stats{grid-template-columns:1fr}
+  .stat{border-right:0;border-bottom:1px solid var(--line);padding:16px 0}
+  .stat:last-child{border-bottom:0}
+  .hero-foot{letter-spacing:.14em}
+  .cn{width:16px;height:16px}
+}
+@media (max-width:420px){
+  .brand{font-size:11px}
+  .bar-right{font-size:8.5px;letter-spacing:.1em}
+  .stamp{font-size:11px}
+}
+@media (max-height:560px) and (orientation:landscape){
+  .hero{min-height:auto;padding-top:calc(54px + 34px);padding-bottom:34px}
+  .hero-foot{margin-top:30px}
+  .ghost{font-size:70px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  body::after,.dot,.scan,.ticker-track{animation:none}
+  .reveal.pre{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="fx" aria-hidden="true"><canvas id="bg"></canvas></div>
+<i class="scan" aria-hidden="true"></i>
+<span class="cn c1" aria-hidden="true"></span><span class="cn c2" aria-hidden="true"></span>
+<span class="cn c3" aria-hidden="true"></span><span class="cn c4" aria-hidden="true"></span>
+
+<header class="bar">
+  <a class="brand" href="#home">VANGUARD<sup>®</sup></a>
+  <nav class="bar-mid" aria-label="Sections">
+    <a href="#home">HOME</a><span aria-hidden="true">/</span><a href="#about">ABOUT</a>
+  </nav>
+  <span class="bar-right"><i class="dot" aria-hidden="true"></i><span id="utc">00:00:00 UTC</span></span>
+</header>
+
+<span class="side" aria-hidden="true">A FRIEND GROUP, NOT A BRAND</span>
+
+<main id="main">
+  <section class="hero" id="home">
+    <span class="ghost" aria-hidden="true">VANGUARD</span>
+
+    <svg class="sc" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M2 18 L98 7"/>
+      <path d="M6 52 L70 47"/>
+      <path d="M30 96 L96 82"/>
+      <path d="M0 74 L44 68"/>
+      <path d="M62 2 L58 44"/>
+    </svg>
+
+    <div class="kick">
+      <span>FILE 000</span>
+      <span class="rule" aria-hidden="true"></span>
+      <span class="mid">A WARPATH FRIEND GROUP</span>
+      <span class="rule" aria-hidden="true"></span>
+      <span><b>EST. UNKNOWN</b></span>
+    </div>
+
+    <h1 aria-label="We stay close.">
+      <span class="ln l1" aria-hidden="true"><span class="lt">WE</span></span>
+      <span class="ln l2" aria-hidden="true"><span class="lt">STAY</span></span>
+      <span class="ln l3" aria-hidden="true"><span class="lt">close.</span></span>
+    </h1>
+
+    <div class="lede">
+      <p>Vanguard is a small group of friends who met in Warpath. We picked a camp, joined the same alliance, and never really left. <strong>No company, no roster, no membership form.</strong></p>
+      <p>Most nights it is a map, a chat window, and somebody yelling about artillery. The game is the reason we met. Staying is the part we chose.</p>
+    </div>
+
+    <div class="stamp" aria-hidden="true">
+      <em>ONE CAMP / ONE ALLIANCE</em>
+      VANGUARD
+    </div>
+
+    <div class="hero-foot">
+      <span>SCROLL ↓</span>
+      <span><b>03 CAMPS</b> / 01 GROUP</span>
+      <span>FRIENDS, NOT A BRAND</span>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="tick-set">VANGUARD <i>·</i> A WARPATH FRIEND GROUP <i>·</i> ONE CAMP, ONE ALLIANCE <i>·</i> TANKS AT DAWN <i>·</i> FRIENDS, NOT A BRAND <i>·</i></span>
+      <span class="tick-set">VANGUARD <i>·</i> A WARPATH FRIEND GROUP <i>·</i> ONE CAMP, ONE ALLIANCE <i>·</i> TANKS AT DAWN <i>·</i> FRIENDS, NOT A BRAND <i>·</i></span>
+    </div>
+  </div>
+
+  <section class="sec" id="about">
+    <div class="wrap reveal">
+      <div class="sec-head"><span class="n">01</span><span>ABOUT</span><span class="rule" aria-hidden="true"></span><span><b>THE GROUP</b></span></div>
+      <h2>A friend group that met in Warpath and stayed.</h2>
+
+      <div class="split">
+        <div class="split-label">
+          <b>THE SHORT VERSION</b>
+          No company. No roster. A few friends, one alliance, and a standing invitation to the next push.
+        </div>
+        <div class="body">
+          <p>Vanguard is a small circle of friends who met in <strong>Warpath</strong>, the modern-war strategy game by Lilith Games. We picked a camp, joined one alliance, and kept showing up. There is no company behind this page and no membership form. If you have been in the chat, you are already part of it.</p>
+          <p>Warpath is a real-time strategy game about building a base, training an army, and holding ground with other people. It has three camps — <strong>Camp Liberty</strong>, <strong>Vanguard Division</strong> and <strong>Martyrs' Watch</strong> — each with its own tanks, artillery and aircraft. You pick one, and then you find out the game is really about the people you play it with.</p>
+          <p>Our alliance is small and unglamorous. Someone scouts, someone hoards resources, someone forgets a timer and loses a garrison at three in the morning. We do the events when we can, cover each other's bases when we cannot, and nobody keeps score once the game is closed.</p>
+          <p>That is the whole organisation chart: a camp, an alliance, a chat, and friends who come back the next night. The war is fictional. The group is not.</p>
+          <p class="pull">The game is the excuse. The group is the point.</p>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>03</b><span>CAMPS TO ARGUE ABOUT</span></div>
+        <div class="stat"><b>01</b><span>ALLIANCE, NO DEPARTMENTS</span></div>
+        <div class="stat"><b>00</b><span>RULES ABOUT WHO JOINS</span></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="fgrid">
+    <div class="fbrand" aria-label="Vanguard">VAN<span>GUARD</span></div>
+    <div class="fcol">
+      <b>INDEX 000 / FRIEND GROUP</b>
+      One camp, one alliance.<br>
+      Built together, served static.
+    </div>
+    <a class="top-link" href="#home">BACK TO TOP ↑</a>
+  </div>
+
+  <div class="fbar">
+    <span>© <span id="year">2026</span> VANGUARD</span>
+    <span>HONOR / VALOR / TRIUMPH</span>
+    <span><b id="coords" class="coords" title="Hover to lock on Istanbul">41.0082° N / 28.9784° E</b></span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script>
+(function () {
+  var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* intro */
+  var A = window.anime;
+  var paths = [].slice.call(document.querySelectorAll('.sc path'));
+  if (A && !reduceMotion) {
+    paths.forEach(function (p) { p.style.opacity = 0; });
+    A.timeline({ easing: 'easeOutExpo' })
+      .add({ targets: '.ln', translateY: ['16%', '0%'], opacity: [0, 1], duration: 1300, delay: A.stagger(120) })
+      .add({ targets: '.kick', opacity: [0, 1], duration: 700 }, '-=900')
+      .add({ targets: '.stamp', opacity: [0, 1], duration: 600 }, '-=600')
+      .add({ targets: '.lede, .hero-foot', opacity: [0, 1], duration: 900 }, '-=500');
+    A({
+      targets: paths, strokeDashoffset: [A.setDashoffset, 0], opacity: [0, 1],
+      duration: 1500, delay: A.stagger(140, { start: 700 }), easing: 'easeInOutSine'
+    });
+  }
+
+  /* UTC clock */
+  var utc = document.getElementById('utc');
+  function tick() { utc.textContent = new Date().toISOString().slice(11, 19) + ' UTC'; }
+  tick();
+  setInterval(tick, 1000);
+
+  /* year */
+  var year = document.getElementById('year');
+  if (year) year.textContent = String(new Date().getFullYear());
+
+  /* coordinates: random points inside Turkish forests; hover the readout to lock on Istanbul */
+  var out = document.getElementById('coords');
+  var locked = false, last = 0;
+  var forests = [ /* name, latMin, latMax, lonMin, lonMax */
+    ['Belgrad Forest', 41.17, 41.22, 28.9, 29],
+    ['Kure Mountains', 41.5, 41.9, 33, 33.8],
+    ['Yedigoller', 40.9, 40.95, 31.7, 31.8],
+    ['Camili, Artvin', 41.35, 41.5, 41.8, 42],
+    ['Abant', 40.6, 40.65, 31.25, 31.3],
+    ['Koprulu Canyon', 37.2, 37.35, 31.1, 31.25],
+    ['Kazdagi', 39.6, 39.8, 26.8, 27],
+    ['Uludag', 40.05, 40.2, 29.1, 29.25],
+    ['Ilgaz Mountains', 41, 41.1, 33.6, 33.8],
+    ['Sarikamis Forest', 40.2, 40.4, 42.5, 42.7],
+    ['Munzur Valley', 39.3, 39.5, 39.5, 39.9],
+    ['Termessos, Antalya', 36.95, 37, 30.45, 30.5]
+  ];
+  function fmt(v, pos, neg) { return Math.abs(v).toFixed(4) + '° ' + (v >= 0 ? pos : neg); }
+  addEventListener('pointermove', function () {
+    if (!out || locked) return;
+    var now = performance.now();
+    if (now - last < 150) return;
+    last = now;
+    var f = forests[Math.random() * forests.length | 0];
+    out.textContent = fmt(f[1] + (f[2] - f[1]) * Math.random(), 'N', 'S') + ' / ' +
+                      fmt(f[3] + (f[4] - f[3]) * Math.random(), 'E', 'W');
+  }, { passive: true });
+  if (out) {
+    out.addEventListener('pointerenter', function () {
+      locked = true;
+      out.textContent = '41.0082° N / 28.9784° E';
+    });
+    out.addEventListener('pointerleave', function () { locked = false; });
+  }
+
+  /* scroll reveal: the class is added here, so the page stays readable if JS fails */
+  var reveals = [].slice.call(document.querySelectorAll('.reveal'));
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    reveals.forEach(function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .08 });
+    reveals.forEach(function (el) {
+      el.classList.add('pre');
+      io.observe(el);
+    });
+  }
+
+  /* halftone dot field */
+  var cv = document.getElementById('bg');
+  if (!cv) return;
+  var ctx = cv.getContext('2d');
+  if (!ctx) return;
+  var W, H, dpr, dotColor, px = -1e3, py = -1e3, tx = -1e3, ty = -1e3;
+  function resize() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    dotColor = getComputedStyle(document.documentElement).getPropertyValue('--mute').trim() || '#8a8a8a';
+  }
+  resize();
+  addEventListener('resize', resize);
+  addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; }, { passive: true });
+  function frame(ms) {
+    var t = ms / 1000;
+    px += (tx - px) * .08;
+    py += (ty - py) * .08;
+    ctx.clearRect(0, 0, W, H);
+    var g = Math.max(30, Math.round(Math.min(W, H) / 18));
+    for (var j = g / 2; j < H; j += g) {
+      for (var i = g / 2; i < W; i += g) {
+        var d = Math.hypot(i - W / 2, j - H / 2);
+        var w = (Math.sin(d / 70 - t * 1.1) * .5 + .5) * (Math.sin(i / 160 + t * .4) * .3 + .7);
+        var pd = Math.hypot(i - px, j - py);
+        var n = pd < 160 ? 1 - pd / 160 : 0;
+        ctx.fillStyle = n > .15 ? '#fff' : dotColor;
+        ctx.globalAlpha = .02 + .1 * w + n * .22;
+        ctx.beginPath();
+        ctx.arc(i, j, g * .26 * (.1 + .9 * w * w) + n * g * .18, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    if (!reduceMotion) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

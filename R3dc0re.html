@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Keep calm and r3dc0re on.">
+<title>R3dc0re</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75,800&family=Caveat:wght@700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000;--ink:#fff;--accent:#ff6600;--mute:#8a8a8a;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0;overflow:hidden}
+body{
+  background:var(--bg);color:var(--ink);
+  font:400 .7rem/1.3 'Space Mono',ui-monospace,monospace;
+  text-transform:uppercase;
+}
+:focus-visible{outline:3px solid var(--accent)}
+
+/* film grain */
+body::after{
+  content:"";position:fixed;inset:0;pointer-events:none;opacity:.09;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(1) infinite;
+}
+@keyframes grain{
+  0%{background-position:0 0}25%{background-position:-60px 30px}
+  50%{background-position:40px -50px}75%{background-position:-30px -20px}
+}
+
+/* layout */
+.page{--S:min(17vw,24svh);position:relative;height:100svh;display:grid;place-items:center;overflow:hidden}
+.page::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0 41px,rgba(255,255,255,.05) 41px 42px,transparent 42px 97px,rgba(255,255,255,.035) 97px 99px);
+}
+
+/* title */
+h1{
+  margin:0;position:relative;
+  font:800 var(--S)/.8 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;letter-spacing:-.01em;text-transform:uppercase;
+}
+.ln{display:block;white-space:nowrap}
+.ln span{display:inline-block}
+.l1{margin-left:-2vw}
+.l2{margin-left:12vw;margin-top:-.12em;color:transparent;-webkit-text-stroke:max(2px,.4vw) var(--ink)}
+.l3{
+  font-family:Caveat,'Segoe Script','Bradley Hand',cursive;
+  font-weight:700;font-stretch:100%;text-transform:none;font-size:1.55em;
+  margin:-.12em 0 0 -3vw;color:var(--accent);letter-spacing:0;
+}
+.l4{margin:-.2em 0 0 34vw;font-size:.7em}
+.l1,.l4{text-shadow:.035em .03em 0 rgba(255,102,0,.9)}
+.tag{
+  position:absolute;left:3vw;top:49%;transform:rotate(-4deg);z-index:2;
+  background:var(--ink);color:var(--bg);padding:.35em .8em;
+  font:700 clamp(.7rem,1.8vw,1.2rem)/1 'Space Mono',monospace;letter-spacing:.12em;
+}
+.sc{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sc path{fill:none;stroke:var(--bg);stroke-linecap:round;vector-effect:non-scaling-stroke}
+
+/* labels and corner marks */
+.m{position:absolute;z-index:3}
+.m b{font-weight:400;color:var(--accent)}
+.tl{top:1.7rem;left:2rem}
+.tc{top:1.7rem;left:50%;transform:translateX(-50%);text-align:center}
+.tr{top:1.7rem;right:2rem;text-align:right}
+.br{bottom:1.7rem;right:2rem;z-index:5;text-align:right;color:var(--ink)}
+.br b{color:var(--ink)}
+.cn{position:absolute;width:26px;height:26px;border:0 solid #fff;z-index:4;pointer-events:none}
+.c1{top:10px;left:10px;border-width:4px 0 0 4px}
+.c2{top:10px;right:10px;border-width:4px 4px 0 0}
+.c3{bottom:10px;left:10px;border-width:0 0 4px 4px}
+.c4{bottom:10px;right:10px;border-width:0 4px 4px 0}
+.dot{display:inline-block;animation:blink 1.2s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+.side{
+  position:absolute;left:.9rem;top:14svh;z-index:3;writing-mode:vertical-rl;
+  color:var(--ink);font:800 1.1rem/1 Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;
+  font-stretch:75%;letter-spacing:.14em;word-spacing:.7em;pointer-events:none;
+}
+
+/* outlined background type */
+.mew,.num{
+  position:absolute;bottom:3.4rem;color:transparent;-webkit-text-stroke:1px var(--ink);
+  font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:800;font-stretch:75%;
+  line-height:1;pointer-events:none;user-select:none;
+}
+.mew{
+  --f:min(9vw,12svh);left:2rem;font-size:var(--f);letter-spacing:-.01em;
+  transform:rotate(-3deg);transform-origin:left bottom;
+}
+.mew i{font-style:normal}
+.mew i:nth-child(1){opacity:.6}
+.mew i:nth-child(2){opacity:.3}
+.mew i:nth-child(3){opacity:.12}
+.mew::after{
+  content:"All Hail / Queen";position:absolute;left:.2rem;top:-.4rem;
+  font:700 .6rem/1 'Space Mono',monospace;letter-spacing:.22em;color:var(--accent);-webkit-text-stroke:0;
+}
+.num{--g:min(14vw,20svh);right:2rem;font-size:var(--g);opacity:.32}
+.num.a{bottom:calc(3.4rem + var(--g)*.85);opacity:.2}
+.num.b{bottom:calc(3.4rem + var(--g)*1.7);opacity:.12}
+.num.c{bottom:calc(3.4rem + var(--g)*2.55);opacity:.06}
+
+/* animated background */
+.fx{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.fx canvas{display:block;width:100%;height:100%}
+.scan{position:absolute;top:0;bottom:0;left:0;width:1px;background:var(--accent);opacity:.4;animation:scan 14s linear infinite}
+.scan::after{content:"";position:absolute;top:0;bottom:0;left:-40px;width:40px;background:linear-gradient(90deg,transparent,rgba(255,102,0,.15))}
+@keyframes scan{from{transform:translateX(-5vw)}to{transform:translateX(105vw)}}
+
+@media (max-width:700px){.tc{display:none}.l2{margin-left:8vw}.l4{margin-left:42vw}}
+@media (prefers-reduced-motion:reduce){body::after,.dot,.scan{animation:none}}
+</style>
+</head>
+<body>
+<main class="page">
+  <span class="num" aria-hidden="true">777</span>
+  <span class="num a" aria-hidden="true">777</span>
+  <span class="num b" aria-hidden="true">777</span>
+  <span class="num c" aria-hidden="true">777</span>
+  <span class="mew" aria-hidden="true"><i>W</i><i>H</i><i>O</i></span>
+
+  <div class="fx" aria-hidden="true">
+    <canvas id="bg"></canvas>
+    <i class="scan"></i>
+  </div>
+
+  <span class="side">As for me, I trust in You</span>
+  <span class="m tl" aria-hidden="true"><b class="dot">●</b></span>
+  <span class="m tc">The New Era Begins<br> </span>
+  <span class="m tr">File 777<br><b id="utc">00:00:00 UTC</b></span>
+
+  <span class="cn c1"></span><span class="cn c2"></span><span class="cn c3"></span><span class="cn c4"></span>
+  <span class="m br"><b id="coords">00.0000° N / 000.0000° E</b></span>
+
+  <h1 aria-label="Keep calm and r3dc0re on.">
+    <span class="ln l1" aria-hidden="true"><span>K</span><span>E</span><span>E</span><span>P</span></span>
+    <span class="ln l2" aria-hidden="true"><span>C</span><span>A</span><span>L</span><span>M</span></span>
+    <span class="tag" aria-hidden="true">AND</span>
+    <span class="ln l3" aria-hidden="true">R3dc0re</span>
+    <span class="ln l4" aria-hidden="true"><span>O</span><span>N</span><span>.</span></span>
+    <svg class="sc" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M8 4C30 22 18 48 40 62" style="stroke-width:2px"/>
+      <path d="M30 2C52 16 62 34 48 56" style="stroke-width:1.2px"/>
+      <path d="M60 6C70 22 56 36 78 54" style="stroke-width:3px"/>
+      <path d="M4 40C30 34 60 46 96 30" style="stroke-width:1px"/>
+      <path d="M20 52C40 60 55 44 78 50" style="stroke-width:2.2px"/>
+    </svg>
+  </h1>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script>
+(function () {
+  var reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* intro animation */
+  var A = window.anime;
+  var paths = [].slice.call(document.querySelectorAll('.sc path'));
+  if (A && !reduceMotion) {
+    paths.forEach(function (p) { p.style.opacity = 0; });
+    A.timeline({ easing: 'easeOutExpo' })
+      .add({ targets: '.ln', translateY: ['18%', '0%'], opacity: [0, 1], duration: 1400, delay: A.stagger(150) })
+      .add({ targets: '.tag', opacity: [0, 1], duration: 600, easing: 'linear' }, '-=600')
+      .add({ targets: '.m', opacity: [0, 1], duration: 800, delay: A.stagger(70) }, '-=900');
+    A({
+      targets: paths, strokeDashoffset: [A.setDashoffset, 0], opacity: [0, 1],
+      duration: 1600, delay: A.stagger(160, { start: 900 }), easing: 'easeInOutSine'
+    });
+  }
+
+  /* UTC clock */
+  var utc = document.getElementById('utc');
+  function tick() { utc.textContent = new Date().toISOString().slice(11, 19) + ' UTC'; }
+  tick();
+  setInterval(tick, 1000);
+
+  /* coordinates: random points inside Turkish forests; hover to lock on Istanbul */
+  var out = document.getElementById('coords');
+  var locked = false, last = 0;
+  var forests = [ /* name, latMin, latMax, lonMin, lonMax */
+    ['Belgrad Forest', 41.17, 41.22, 28.9, 29],
+    ['Kure Mountains', 41.5, 41.9, 33, 33.8],
+    ['Yedigoller', 40.9, 40.95, 31.7, 31.8],
+    ['Camili, Artvin', 41.35, 41.5, 41.8, 42],
+    ['Abant', 40.6, 40.65, 31.25, 31.3],
+    ['Koprulu Canyon', 37.2, 37.35, 31.1, 31.25],
+    ['Kazdagi', 39.6, 39.8, 26.8, 27],
+    ['Uludag', 40.05, 40.2, 29.1, 29.25],
+    ['Ilgaz Mountains', 41, 41.1, 33.6, 33.8],
+    ['Sarikamis Forest', 40.2, 40.4, 42.5, 42.7],
+    ['Munzur Valley', 39.3, 39.5, 39.5, 39.9],
+    ['Termessos, Antalya', 36.95, 37, 30.45, 30.5]
+  ];
+  function fmt(v, pos, neg) { return Math.abs(v).toFixed(4) + '° ' + (v >= 0 ? pos : neg); }
+  addEventListener('pointermove', function () {
+    var now = performance.now();
+    if (locked || now - last < 110) return;
+    last = now;
+    var f = forests[Math.random() * forests.length | 0];
+    out.textContent = fmt(f[1] + (f[2] - f[1]) * Math.random(), 'N', 'S') + ' / ' +
+                      fmt(f[3] + (f[4] - f[3]) * Math.random(), 'E', 'W');
+  }, { passive: true });
+  var box = document.querySelector('.br');
+  box.addEventListener('pointerenter', function () {
+    locked = true;
+    out.textContent = '41.0082° N / 28.9784° E';
+  });
+  box.addEventListener('pointerleave', function () { locked = false; });
+
+  /* halftone dot field */
+  var cv = document.getElementById('bg'), ctx = cv.getContext('2d');
+  var W, H, dpr, dotColor, px = -1e3, py = -1e3, tx = -1e3, ty = -1e3;
+  function resize() {
+    dpr = Math.min(devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    dotColor = getComputedStyle(document.documentElement).getPropertyValue('--mute').trim() || '#8a8a8a';
+  }
+  resize();
+  addEventListener('resize', resize);
+  addEventListener('pointermove', function (e) { tx = e.clientX; ty = e.clientY; }, { passive: true });
+  function frame(ms) {
+    var t = ms / 1000;
+    px += (tx - px) * .08;
+    py += (ty - py) * .08;
+    ctx.clearRect(0, 0, W, H);
+    var g = Math.max(30, Math.round(Math.min(W, H) / 18));
+    for (var j = g / 2; j < H; j += g) {
+      for (var i = g / 2; i < W; i += g) {
+        var d = Math.hypot(i - W / 2, j - H / 2);
+        var w = (Math.sin(d / 70 - t * 1.1) * .5 + .5) * (Math.sin(i / 160 + t * .4) * .3 + .7);
+        var pd = Math.hypot(i - px, j - py);
+        var n = pd < 160 ? 1 - pd / 160 : 0;
+        // Neon Orange for the highlight
+        ctx.fillStyle = n > .15 ? '#ff6600' : dotColor;
+        ctx.globalAlpha = .03 + .14 * w + n * .35;
+        ctx.beginPath();
+        ctx.arc(i, j, g * .26 * (.1 + .9 * w * w) + n * g * .18, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    if (!reduceMotion) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
